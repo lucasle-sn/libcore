@@ -4,9 +4,6 @@ C_COMPILER=gcc
 CXX_COMPILER=g++
 BUILD_DIR=${BUILD_DIR_PARENT}/${BUILD_TYPE}/${C_COMPILER}
 
-FILES=$(shell find . -not -path "./third_party/*" -not -path "./build/*" \( -name '*.cc' -o -name '*.c' -o -name '*.h' \))
-TMPFILE=./formatted_file
-
 .PHONY: build all clean do-all-unit-tests gen-doxygen do-clang-format-check do-clang-format-run
 
 build:
@@ -33,13 +30,11 @@ build-clang:
 	make build-release C_COMPILER=clang CXX_COMPILER=clang++
 
 all:
-	make build-gcc BUILD_TYPE=debug
-	make build-gcc BUILD_TYPE=release
-	make build-clang BUILD_TYPE=debug
-	make build-clang BUILD_TYPE=release
+	make build-gcc
+	make build-clang
 
 do-all-unit-tests:
-	make all
+	make build-debug
 	cd ${BUILD_DIR} && ctest -j8 -T test --no-compress-output
 
 gen-doxygen:
