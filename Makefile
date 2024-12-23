@@ -15,22 +15,28 @@ build:
 			-DCMAKE_C_COMPILER=${C_COMPILER} \
 			-DCMAKE_CXX_COMPILER=${CXX_COMPILER}
 	@cmake --build ${BUILD_DIR} -j8 -- --no-print-directory
-# Can also use "cd ${BUILD_DIR} && cmake .. && make "
 
+# Use default compiler gcc
 build-debug:
 	make build BUILD_TYPE=debug
 
+# Use default compiler gcc
 build-release:
 	make build BUILD_TYPE=release
 
 build-gcc:
-	make build C_COMPILER=gcc CXX_COMPILER=g++
+	make build-debug C_COMPILER=gcc CXX_COMPILER=g++
+	make build-release C_COMPILER=gcc CXX_COMPILER=g++
 
 build-clang:
-	make build C_COMPILER=clang CXX_COMPILER=clang++
+	make build-debug C_COMPILER=clang CXX_COMPILER=clang++
+	make build-release C_COMPILER=clang CXX_COMPILER=clang++
 
 all:
-	make build-debug C_COMPILER=gcc CXX_COMPILER=g++
+	make build-gcc BUILD_TYPE=debug
+	make build-gcc BUILD_TYPE=release
+	make build-clang BUILD_TYPE=debug
+	make build-clang BUILD_TYPE=release
 
 do-all-unit-tests:
 	make all
