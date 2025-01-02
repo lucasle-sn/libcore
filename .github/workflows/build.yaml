@@ -13,10 +13,10 @@ env:
   BUILD_DIRECTORY: build
 
 jobs:
-  build-ubuntu:
+  build:
     strategy:
       matrix:
-        os: [ubuntu-22.04, ubuntu-20.04]
+        os: [ubuntu-22.04, ubuntu-20.04, debian]
         build-type: ["Debug", "Release"]
         compiler: [
           { c: "gcc-11", cxx: "g++-11", package: "gcc-11 g++-11" },
