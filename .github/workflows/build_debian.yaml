@@ -22,7 +22,7 @@ jobs:
           { c: "clang-14", cxx: "clang++-14", package: "clang-14" }
         ]
     runs-on: ubuntu-latest
-    name: Build Debian ${{ matrix.build-type }} / ${{ matrix.compiler.cxx }}
+    name: Build Debian / ${{ matrix.build-type }} / ${{ matrix.compiler.cxx }}
     timeout-minutes: 30
     steps:
       - name: Checkout code
@@ -31,9 +31,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           submodules: recursive
 
-      - name: Build and Test
+      - name: Build in ${{ matrix.build-type }} & Test
         run: |
-          export BUILD_IMAGE=libcore-${{ matrix.build-type }}
+          export BUILD_IMAGE=libcore-debian-${{ matrix.build-type }}
           export BUILD_DIRECTORY=build/${{ matrix.build-type }}
           docker build -t $BUILD_IMAGE:latest -f ${{ env.DOCKERFILE }} .
           docker run --rm -v $(pwd):${{ env.IMAGE_WORKDIR }} $BUILD_IMAGE:latest sh -c " \
