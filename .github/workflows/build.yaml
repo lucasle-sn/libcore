@@ -32,7 +32,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           submodules: recursive
 
-      - name: Install dependencies
+      - name: Install dependencies Ubuntu-20.04
         if: matrix.os == 'ubuntu-20.04'
         run: |
           if [[ "${{ matrix.compiler.c }}" == "gcc-11" ]]; then
@@ -68,7 +68,7 @@ jobs:
     name: Clang-format Check
     runs-on: ubuntu-22.04
     timeout-minutes: 30
-    needs: [build-ubuntu]
+    needs: [build]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
