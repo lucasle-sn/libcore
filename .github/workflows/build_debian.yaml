@@ -10,6 +10,7 @@ on:
 
 env:
   DOCKERFILE: docker/Dockerfile.debian
+  DOCKER_BUILDIMAGE: libcore-debian
   IMAGE_WORKDIR: /mnt/workspace
 
 jobs:
@@ -21,7 +22,7 @@ jobs:
           { c: "clang-14", cxx: "clang++-14", package: "clang-14" }
         ]
     runs-on: ubuntu-latest
-    name: Build Debian / ${{ matrix.build-type }} / ${{ matrix.compiler.cxx }}
+    name: Build Debian / ${{ matrix.compiler.cxx }}
     timeout-minutes: 30
     steps:
       - name: Checkout code
@@ -32,16 +33,14 @@ jobs:
 
       - name: Build debian docker image
         run: |
-          export BUILD_IMAGE=libcore-debian
-          docker build -t $BUILD_IMAGE:latest -f ${{ env.DOCKERFILE }} .
+          docker build -t ${{ env.DOCKER_BUILDIMAGE }}:latest -f ${{ env.DOCKERFILE }} .
 
       - name: Build & Test
         run: |
-          export BUILD_IMAGE=libcore-debian
           buildTypes=("debug" "release")
           for buildType in "${buildTypes[@]}"; do
             export BUILD_DIRECTORY=build/$buildType
-            docker run --rm -v $(pwd):${{ env.IMAGE_WORKDIR }} $BUILD_IMAGE:latest sh -c " \
+            docker run --rm -v $(pwd):${{ env.IMAGE_WORKDIR }} ${{ env.DOCKER_BUILDIMAGE }}:latest sh -c " \
               cmake -S . -B $BUILD_DIRECTORY \
                 -DCMAKE_BUILD_TYPE=$buildType \
                 -DCMAKE_C_COMPILER=${{ matrix.compiler.c }} \
