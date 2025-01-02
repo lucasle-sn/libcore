@@ -16,7 +16,6 @@ jobs:
   build:
     strategy:
       matrix:
-        build-type: ["debug", "release"]
         compiler: [
           { c: "gcc-11", cxx: "g++-11", package: "gcc-11 g++-11" },
           { c: "clang-14", cxx: "clang++-14", package: "clang-14" }
