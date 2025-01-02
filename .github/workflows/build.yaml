@@ -17,13 +17,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, ubuntu-20.04, debian]
-        build-type: ["Debug", "Release"]
+        # build-type: ["Debug", "Release"]
         compiler: [
           { c: "gcc-11", cxx: "g++-11", package: "gcc-11 g++-11" },
           { c: "clang-14", cxx: "clang++-14", package: "clang-14" }
         ]
     runs-on: ${{ matrix.os }}
-    name: Build ${{ matrix.os }} / ${{ matrix.build-type }} / ${{ matrix.compiler.cxx }}
+    name: Build ${{ matrix.os }} / ${{ matrix.compiler.cxx }}
     timeout-minutes: 30
     steps:
       - name: Checkout code
@@ -53,16 +53,27 @@ jobs:
           sudo apt-get update && \
           sudo apt-get install -y ${{ env.BUILD_DEPENDENCIES }} ${{ matrix.compiler.package }}
 
-      - name: Build
+      - name: Build in Debug
         run: |
-          cmake -S . -B ${{ env.BUILD_DIRECTORY }} \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          export BUILD_TYPE=Debug
+          cmake -S . -B ${{ env.BUILD_DIRECTORY }}/${BUILD_TYPE} \
+            -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
             -DCMAKE_C_COMPILER=${{ matrix.compiler.c }} \
             -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }}
-          cmake --build ${{ env.BUILD_DIRECTORY }} -j10
+          cmake --build ${{ env.BUILD_DIRECTORY }}/${BUILD_TYPE} -j10
+
+      - name: Build in Release
+        run: |
+          export BUILD_TYPE=Release
+          cmake -S . -B ${{ env.BUILD_DIRECTORY }}/${BUILD_TYPE} \
+            -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+            -DCMAKE_C_COMPILER=${{ matrix.compiler.c }} \
+            -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }}
+          cmake --build ${{ env.BUILD_DIRECTORY }}/${BUILD_TYPE} -j10
 
       - name: Test
-        run: cd ${{ env.BUILD_DIRECTORY }} && ctest -j8 -T test --no-compress-output
+        export BUILD_TYPE=Release
+        run: cd ${{ env.BUILD_DIRECTORY }}/${BUILD_TYPE} && ctest -j8 -T test --no-compress-output
 
   clang-format-check:
     name: Clang-format Check
