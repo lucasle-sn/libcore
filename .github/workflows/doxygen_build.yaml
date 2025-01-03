@@ -9,8 +9,9 @@ on:
       - '*'
 
 env:
-  BUILD_DEPENDENCIES: cmake build-essential checkinstall zlib1g-dev libssl-dev libfmt-dev
-  BUILD_DIRECTORY: build
+  BUILD_DIRECTORY: build/doxygen
+  DOCKERFILE: docker/Dockerfile.doxygen
+  DOCKER_BUILDIMAGE: libcore-doxygen
 
 jobs:
   doxygen-build:
@@ -24,16 +25,18 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           submodules: recursive
 
-      - name: Install dependencies
+      - name: Build docker image ${{ matrix.distro }}
         run: |
-          sudo apt-get update && \
-          sudo apt-get install -y ${{ env.BUILD_DEPENDENCIES }} clang-14 doxygen graphviz
+          docker build -t ${{ env.DOCKER_BUILDIMAGE }}:latest -f ${{ env.DOCKERFILE }} .
 
       - name: Generate doxygen
-        env:
-          CC: clang
-          CXX: clang++
         run: |
-          cmake -S . -B ${{ env.BUILD_DIRECTORY }} -DCMAKE_BUILD_TYPE=Debug -DDOXYGEN_BUILD_ENABLED=ON
-          cmake --build ${{ env.BUILD_DIRECTORY }} --target doxygen -- --no-print-directory
-          doxygen ${{ env.BUILD_DIRECTORY }}/doxygen/Doxyfile
+          docker run --rm -v $(pwd):${{ env.IMAGE_WORKDIR }} ${{ env.DOCKER_BUILDIMAGE }}:latest sh -c " \
+            cmake -S . -B ${{ env.BUILD_DIRECTORY }} \
+              -DCMAKE_BUILD_TYPE=Debug \
+              -DCMAKE_C_COMPILER=clang \
+              -DCMAKE_CXX_COMPILER=clang++ \
+              -DDOXYGEN_BUILD_ENABLED=ON
+            cmake --build ${{ env.BUILD_DIRECTORY }} --target doxygen -- --no-print-directory
+            doxygen ${{ env.BUILD_DIRECTORY }}/doxygen/Doxyfile
+          "
