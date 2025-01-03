@@ -12,6 +12,7 @@ env:
   BUILD_DIRECTORY: build/doxygen
   DOCKERFILE: docker/Dockerfile.doxygen
   DOCKER_BUILDIMAGE: libcore-doxygen
+  DOCKER_BUILDIMAGE_WORKDIR: /mnt/workspace
 
 jobs:
   doxygen-build:
@@ -25,13 +26,13 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           submodules: recursive
 
-      - name: Build docker image ${{ matrix.distro }}
+      - name: Build docker image
         run: |
           docker build -t ${{ env.DOCKER_BUILDIMAGE }}:latest -f ${{ env.DOCKERFILE }} .
 
       - name: Generate doxygen
         run: |
-          docker run --rm -v $(pwd):${{ env.IMAGE_WORKDIR }} ${{ env.DOCKER_BUILDIMAGE }}:latest sh -c " \
+          docker run --rm -v $(pwd):${{ env.DOCKER_BUILDIMAGE_WORKDIR }} ${{ env.DOCKER_BUILDIMAGE }}:latest sh -c " \
             cmake -S . -B ${{ env.BUILD_DIRECTORY }} \
               -DCMAKE_BUILD_TYPE=Debug \
               -DCMAKE_C_COMPILER=clang \
