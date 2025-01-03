@@ -15,10 +15,10 @@ jobs:
   build:
     strategy:
       matrix:
-        distro: [debian, almalinux]
+        distro: [debian, almalinux, ubuntu-24.04]
         compiler: [
-          { c: "gcc-11", cxx: "g++-11", package: "gcc-11 g++-11" },
-          { c: "clang-14", cxx: "clang++-14", package: "clang-14" }
+          { c: "gcc-11", cxx: "g++-11" },
+          { c: "clang-14", cxx: "clang++-14" }
         ]
     runs-on: ubuntu-latest
     name: Build ${{ matrix.distro }} / ${{ matrix.compiler.cxx }}
@@ -36,6 +36,8 @@ jobs:
             export DOCKERFILE=docker/Dockerfile.debian
           elif [[ "${{ matrix.distro }}" == "almalinux" ]]; then
             export DOCKERFILE=docker/Dockerfile.alma
+          elif [[ "${{ matrix.distro }}" == "ubuntu-24.04" ]]; then
+            export DOCKERFILE=docker/Dockerfile.ubuntu2404
           else
             exit 1
           fi
