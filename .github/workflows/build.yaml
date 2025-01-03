@@ -9,7 +9,7 @@ on:
       - '*'
 
 env:
-  IMAGE_WORKDIR: /mnt/workspace
+  DOCKER_BUILDIMAGE_WORKDIR: /mnt/workspace
 
 jobs:
   build:
@@ -48,7 +48,7 @@ jobs:
           buildTypes=("debug" "release")
           for buildType in "${buildTypes[@]}"; do
             export BUILD_DIRECTORY=build/$buildType
-            docker run --rm -v $(pwd):${{ env.IMAGE_WORKDIR }} $DOCKER_BUILDIMAGE:latest sh -c " \
+            docker run --rm -v $(pwd):${{ env.DOCKER_BUILDIMAGE_WORKDIR }} $DOCKER_BUILDIMAGE:latest sh -c " \
               cmake -S . -B $BUILD_DIRECTORY \
                 -DCMAKE_BUILD_TYPE=$buildType \
                 -DCMAKE_C_COMPILER=${{ matrix.compiler.c }} \
