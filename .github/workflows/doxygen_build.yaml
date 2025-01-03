@@ -35,8 +35,8 @@ jobs:
           docker run --rm -v $(pwd):${{ env.DOCKER_BUILDIMAGE_WORKDIR }} ${{ env.DOCKER_BUILDIMAGE }}:latest sh -c " \
             cmake -S . -B ${{ env.BUILD_DIRECTORY }} \
               -DCMAKE_BUILD_TYPE=Debug \
-              -DCMAKE_C_COMPILER=clang \
-              -DCMAKE_CXX_COMPILER=clang++ \
+              -DCMAKE_C_COMPILER=clang-14 \
+              -DCMAKE_CXX_COMPILER=clang++-14 \
               -DDOXYGEN_BUILD_ENABLED=ON
             cmake --build ${{ env.BUILD_DIRECTORY }} --target doxygen -- --no-print-directory
             doxygen ${{ env.BUILD_DIRECTORY }}/doxygen/Doxyfile
