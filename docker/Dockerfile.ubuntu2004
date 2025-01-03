@@ -7,11 +7,11 @@ RUN apt-get update && \
     apt-get update
 
 # Update and install basic tools for clang
-RUN sudo apt update && \
-    sudo apt install -y wget gnupg && \
+RUN apt update && \
+    apt install -y wget gnupg && \
     wget https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
-    sudo ./llvm.sh 14
+    ./llvm.sh 14
 
 RUN apt-get update && \
     apt-get install -y \
