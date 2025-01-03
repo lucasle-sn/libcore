@@ -15,7 +15,7 @@ jobs:
   build:
     strategy:
       matrix:
-        distro: [debian, almalinux, ubuntu-24.04]
+        distro: [debian, almalinux, ubuntu-24.04, ubuntu-20.04]
         compiler: [
           { c: "gcc-11", cxx: "g++-11" },
           { c: "clang-14", cxx: "clang++-14" }
@@ -38,6 +38,8 @@ jobs:
             export DOCKERFILE=docker/Dockerfile.alma
           elif [[ "${{ matrix.distro }}" == "ubuntu-24.04" ]]; then
             export DOCKERFILE=docker/Dockerfile.ubuntu2404
+          elif [[ "${{ matrix.distro }}" == "ubuntu-20.04" ]]; then
+            export DOCKERFILE=docker/Dockerfile.ubuntu2004
           else
             exit 1
           fi

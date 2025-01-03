@@ -1,0 +1,25 @@
+FROM ubuntu:20.04
+
+# Update and install basic tools for gcc
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository ppa:ubuntu-toolchain-r/test && \
+    apt-get update
+
+# Update and install basic tools for clang
+RUN sudo apt update && \
+    sudo apt install -y wget gnupg && \
+    wget https://apt.llvm.org/llvm.sh && \
+    chmod +x llvm.sh && \
+    sudo ./llvm.sh 14
+
+RUN apt-get update && \
+    apt-get install -y \
+        cmake build-essential checkinstall zlib1g-dev libssl-dev libfmt-dev \
+        gcc-11 g++-11 clang-14 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+USER root
+WORKDIR /mnt/workspace
+RUN ["/bin/bash"]
