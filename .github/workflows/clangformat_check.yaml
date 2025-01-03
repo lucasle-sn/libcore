@@ -1,0 +1,44 @@
+name: Check Clang-format Pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '*'
+
+env:
+  BUILD_DEPENDENCIES: cmake build-essential checkinstall zlib1g-dev libssl-dev libfmt-dev clang-14
+
+jobs:
+  clang-format-check:
+    name: Clang-format Check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          submodules: true
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && \
+          sudo apt-get install -y ${{ env.BUILD_DEPENDENCIES }}
+
+      - name: Check clang-format
+        run: |
+          FILES=$(find . -not -path "./third_party/*" -not -path "./build/*" \( -name '*.cc' -o -name '*.c' -o -name '*.h' \))
+          TMPFILE="./formatted_file"
+          for file in $FILES; do
+            clang-format -style=file $file > $TMPFILE
+            if ! diff $file $TMPFILE > /dev/null; then
+              echo "Clang-format failed on $file"
+              rm $TMPFILE
+              exit 1
+            fi 
+            rm $TMPFILE
+          done
+          echo "Clang-format check successful"

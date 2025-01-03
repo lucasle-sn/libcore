@@ -1,7 +1,12 @@
-name: Publish Doxygen
+name: Build Doxygen
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '*'
 
 env:
   BUILD_DIRECTORY: build/doxygen
@@ -10,8 +15,8 @@ env:
   DOCKER_BUILDIMAGE_WORKDIR: /mnt/workspace
 
 jobs:
-  doxygen-deploy:
-    name: Doxygen Publish
+  doxygen-build:
+    name: Doxygen Check
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
@@ -36,10 +41,3 @@ jobs:
             cmake --build ${{ env.BUILD_DIRECTORY }} --target doxygen -- --no-print-directory
             doxygen ${{ env.BUILD_DIRECTORY }}/doxygen/Doxyfile
           "
-
-      - name: Upload Doxygen Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: doxygen-docs
-          path: ${{ env.BUILD_DIRECTORY }}/doxygen/docs/html
-          if-no-files-found: error
