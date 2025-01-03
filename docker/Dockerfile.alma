@@ -1,6 +1,7 @@
 FROM almalinux/9-base:9.5
 RUN dnf update -y && \
-    dnf install -y epel-release cmake make zlib-devel openssl-devel fmt-devel gcc gcc-c++ clang && \
+    dnf install -y epel-release && \
+    dnf install -y cmake make zlib-devel openssl-devel fmt-devel gcc gcc-c++ clang && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
