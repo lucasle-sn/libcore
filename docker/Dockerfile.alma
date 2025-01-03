@@ -2,8 +2,7 @@ FROM almalinux/9-base:9.5
 RUN dnf update -y && \
     dnf install -y cmake make checkinstall zlib-devel openssl-devel libfmt-devel gcc gcc-c++ clang && \
     dnf clean all && \
-    rm -rf /var/cache/dnf && \
-    source /opt/rh/gcc-toolset-11/enable
+    rm -rf /var/cache/dnf
 
 USER root
 WORKDIR /mnt/workspace
