@@ -1,4 +1,4 @@
-name: Doxygen Check
+name: Build Doxygen
 
 on:
   push:
@@ -13,7 +13,7 @@ env:
   BUILD_DIRECTORY: build
 
 jobs:
-  doxygen-check:
+  doxygen-build:
     name: Doxygen Check
     runs-on: ubuntu-24.04
     timeout-minutes: 30
