@@ -48,7 +48,7 @@ gen-doxygen:
 			-DCMAKE_BUILD_TYPE=debug \
 			-DCMAKE_C_COMPILER="clang" \
 			-DCMAKE_CXX_COMPILER="clang++" \
-			-DDOXYGEN_BUILD_ENABLED=ON
+			-Dlibcore_DOXYGEN_BUILD_ENABLED=ON
 	@cmake --build ${buildDir} --target doxygen -- --no-print-directory
 	doxygen ${buildDir}/doxygen/Doxyfile
 
