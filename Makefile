@@ -34,7 +34,12 @@ all:
 	make build-clang
 
 do-all-unit-tests:
-	make build-debug
+	@cmake -S . -B ${BUILD_DIR} \
+			-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+			-DCMAKE_C_COMPILER=${C_COMPILER} \
+			-DCMAKE_CXX_COMPILER=${CXX_COMPILER} \
+			-Dlibcore_ENABLE_TESTS=ON
+	@cmake --build ${BUILD_DIR} -j8 -- --no-print-directory
 	cd ${BUILD_DIR} && ctest -j8 -T test --no-compress-output
 
 gen-doxygen:

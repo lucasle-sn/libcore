@@ -13,7 +13,10 @@ find_package(fmt REQUIRED)
 find_package(Threads REQUIRED)
 
 # Add third-party libraries
-add_subdirectory(third_party/gtest)
+option(libcore_ENABLE_TESTS "Enable libcore tests" OFF)
+if(libcore_ENABLE_TESTS)
+  add_subdirectory(third_party/gtest)
+endif()
 
 add_subdirectory(public_types)
 add_subdirectory(utilities)
