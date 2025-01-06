@@ -37,7 +37,11 @@ jobs:
           CC: gcc-11
           CXX: g++-11
         run: |
-          cmake -S . -B ${{ env.BUILD_DIRECTORY }} -DCODE_COVERAGE=ON -DCMAKE_C_FLAGS=--coverage -DCMAKE_CXX_FLAGS=--coverage
+          cmake -S . -B ${{ env.BUILD_DIRECTORY }} \
+            -Dlibcore_ENABLE_TESTS=ON \
+            -DCODE_COVERAGE=ON \
+            -DCMAKE_C_FLAGS=--coverage \
+            -DCMAKE_CXX_FLAGS=--coverage
           build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build ${{ env.BUILD_DIRECTORY }} -j10
 
       - name: Generate coverage information

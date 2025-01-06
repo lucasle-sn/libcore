@@ -56,7 +56,8 @@ jobs:
               cmake -S . -B $BUILD_DIRECTORY \
                 -DCMAKE_BUILD_TYPE=$buildType \
                 -DCMAKE_C_COMPILER=${{ matrix.compiler.c }} \
-                -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }}
+                -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }} \
+                -Dlibcore_ENABLE_TESTS=ON
               cmake --build $BUILD_DIRECTORY -j10
               cd $BUILD_DIRECTORY && ctest -j8 -T test --no-compress-output
             "
