@@ -5,16 +5,15 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 option(libcore_DOXYGEN_BUILD_ENABLED "Enable Doxygen Build" OFF)
-
-message(STATUS "Enable testing")
-enable_testing()
+option(libcore_ENABLE_TESTS "Enable libcore tests" OFF)
 
 find_package(fmt REQUIRED)
 find_package(Threads REQUIRED)
 
 # Add third-party libraries
-option(libcore_ENABLE_TESTS "Enable libcore tests" OFF)
 if(libcore_ENABLE_TESTS)
+  message(STATUS "libcore testing enabled")
+  enable_testing()
   add_subdirectory(third_party/gtest)
 endif()
 

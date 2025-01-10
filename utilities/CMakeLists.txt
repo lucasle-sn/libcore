@@ -12,7 +12,8 @@ target_link_libraries(utilities
   PUBLIC public-types Threads::Threads fmt::fmt
 )
 
-if(libcore_ENABLE_TESTS)
+if(TARGET gtest)
+  message(STATUS "Static library test-utilities build enabled")
   add_library(test-utilities
     src/test_fixture.cc
   )
@@ -22,7 +23,9 @@ if(libcore_ENABLE_TESTS)
   target_link_libraries(test-utilities
     PUBLIC gtest gtest_main utilities
   )
+endif()
 
+if(libcore_ENABLE_TESTS)
   add_executable(unit-test-utilities
     test/test_bytestream.cc
     test/test_thread.cc
