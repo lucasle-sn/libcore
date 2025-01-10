@@ -34,7 +34,12 @@ all:
 	make build-clang
 
 do-all-unit-tests:
-	make build-debug
+	@cmake -S . -B ${BUILD_DIR} \
+			-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+			-DCMAKE_C_COMPILER=${C_COMPILER} \
+			-DCMAKE_CXX_COMPILER=${CXX_COMPILER} \
+			-Dlibcore_TESTING_ENABLED=ON
+	@cmake --build ${BUILD_DIR} -j8 -- --no-print-directory
 	cd ${BUILD_DIR} && ctest -j8 -T test --no-compress-output
 
 gen-doxygen:
@@ -43,7 +48,7 @@ gen-doxygen:
 			-DCMAKE_BUILD_TYPE=debug \
 			-DCMAKE_C_COMPILER="clang" \
 			-DCMAKE_CXX_COMPILER="clang++" \
-			-DDOXYGEN_BUILD_ENABLED=ON
+			-Dlibcore_DOXYGEN_BUILD_ENABLED=ON
 	@cmake --build ${buildDir} --target doxygen -- --no-print-directory
 	doxygen ${buildDir}/doxygen/Doxyfile
 
