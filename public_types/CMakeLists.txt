@@ -4,7 +4,7 @@ target_include_directories(public-types
   INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-if (libcore_ENABLE_TESTS)
+if (libcore_TESTING_ENABLED)
   add_executable(unit-test-public-types
     test/test_error_codes.cc
     test/test_span.cc

@@ -25,7 +25,7 @@ if(TARGET gtest)
   )
 endif()
 
-if(libcore_ENABLE_TESTS)
+if(libcore_TESTING_ENABLED)
   add_executable(unit-test-utilities
     test/test_bytestream.cc
     test/test_thread.cc

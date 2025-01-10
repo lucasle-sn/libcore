@@ -38,7 +38,7 @@ jobs:
           CXX: g++-11
         run: |
           cmake -S . -B ${{ env.BUILD_DIRECTORY }} \
-            -Dlibcore_ENABLE_TESTS=ON \
+            -Dlibcore_TESTING_ENABLED=ON \
             -DCODE_COVERAGE=ON \
             -DCMAKE_C_FLAGS=--coverage \
             -DCMAKE_CXX_FLAGS=--coverage
